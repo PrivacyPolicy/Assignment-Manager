@@ -10,7 +10,7 @@
 // TODO: fix bug when typing up/down scrolls view by default
 // TODO: rearrange classes
 
-const ASSIGNMENTS_KEY = "AssignmentManager_assignments"
+const ASSIGNMENTS_KEY = "AssignmentManager_data"
       DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 var data = {};
 // {classes: [ {id: 0, name: ""} ],
@@ -19,17 +19,13 @@ var data = {};
 
 $(function() {
     data = loadData();
-    buildTable(data);
-    
-    // Populate class list in #templateEdit
-    for (var i = 0; i < data.classes.length; i++) {
-        var option = $(".editClass > option").first().get(0);
-        var newOption = option.cloneNode(true);
-        newOption.innerHTML = data.classes[i].name;
-        $(".editClass").append(newOption);
+
+    if (data.assignments) {
+        buildTable(data);
+    } else {
+        $(".noAssignments").removeClass("invisible");
     }
-    $(".editClass > option").first().remove();
-    
+
     $(".buttonNew").click(pressButton);
     $(document).keyup(pressKey);
 });
@@ -37,7 +33,7 @@ $(function() {
 function buildTable() {
     // purge the table
     $("#content tr:not(.persistant)").remove();
-    
+
     var sorted = data.assignments.sort(function(a, b) {
         if (a.due.m < b.due.m) return -1;
         if (a.due.m > b.due.m) return 1;
@@ -48,11 +44,11 @@ function buildTable() {
         return a.name.toLocaleLowerCase().localeCompare(
             b.name.toLocaleLowerCase());
     });
-    
+
     for (var i = 0; i < sorted.length; i++) {
         addAssignment(sorted[i]);
     }
-    
+
     // No assignments (which is a good thing ^-^)
     if (i === 0) {
         $(".noAssignments").removeClass("invisible");
@@ -111,10 +107,10 @@ function editAssigment(id) {
     $temp.removeClass("persistant");
     // if it's focused, be sure to remember that fact
     $row.attr("data-wasfocused", $("#" + id).is(":focus"));
-    
+
     // Disable all other buttons
     $("tr:not(.editting) button").prop("disabled", true);
-    
+
     var className = $row.find(".class").text();
     $temp.find(".editClass").children().each(function(i, elem) {
         if (elem.innerHTML == className) {
@@ -123,26 +119,27 @@ function editAssigment(id) {
     });
     var name = $row.find(".name").children().eq(0).text();
     $temp.find(".editName").val(name);
-    
+
     var dueVals = $row.find(".due").text().split("/");
     var m = parseInt(dueVals[0]);
     var d = parseInt(dueVals[1].split(" ")[0]);
     $temp.find(".editMonth").val(m);
     $temp.find(".editDay").val(d);
     $temp.find(".editWeekDay").text(weekDayFromDate(m, d));
-    
+
     $temp.find(".buttonCancel, .buttonApply").click(pressButton);
-    
+
     $temp.insertBefore($row);
     $row.addClass("hidden");
-    
+
     $temp.find(".editClass").focus();
-    
+
     // change the weekday when the due date changes
     $("input[type=\"number\"]").change(changeDate);
 }
 function confirmEditAssignment() {
     var id = parseInt($("tr.hidden").attr("id"));
+    if (!data.assignments) data.assignments = [];
     var ind = getObjIndForKeyValue(data.assignments, "id", id);
     var $row = $("tr.editting:not(#templateEdit)");
     var wasFocused = ($("#" + id).attr("data-wasfocused") === "true");
@@ -154,25 +151,26 @@ function confirmEditAssignment() {
         var d = new Date();
         var mo = d.getMonth() + 1;
         var da = d.getDate();
+        if (!data.assignments) data.assignments = [];
         data.assignments.push({id:newId, due:{m: mo, d: da}});
         ind = data.assignments.length - 1;
     }
     data.assignments[ind].class = classId;
-    
+
     data.assignments[ind].name = $row.find(".editName").val();
-    
+
     var m = parseInt($row.find(".editMonth").val());
     var d = parseInt($row.find(".editDay").val());
     data.assignments[ind].due.m = m;
     data.assignments[ind].due.d = d;
-    
+
     // Re-enable all other buttons
     $("tr button").prop("disabled", false);
     $(".buttonNew").removeClass("hidden");
-    
+
     saveData();
     buildTable();
-    
+
     $("#" + id).focus();
 }
 
@@ -186,22 +184,22 @@ function cancelEditAssignment() {
         $("button").prop("disabled", false);
     } else {
         var wasFocused = $("#" + id).attr("data-wasfocused") === "true";
-        
+
         // Go back to the way we had it before
         buildTable();
         $("button").prop("disabled", false);
-        
+
         $("#" + id).focus();
     }
 }
-    
+
 function pressKey(event) {
     var c = event.keyCode;
     var $focusTr = $("tr:focus");
     var focusing = ($focusTr.length > 0);
     var $editTr = $("tr.editting:not(#templateEdit)");
     var editting = ($editTr.length > 0);
-    
+
     if (c === 13) {// enter
         if (editting) {
             $editTr.find("button.buttonApply").click();
@@ -271,6 +269,20 @@ function pressKey(event) {
 function newAssignment() {
     if ($(".buttonNew").is(".hidden") ||
         $(".buttonNew").prop("disabled")) return;
+
+    if (data.classes) {
+        // Populate class list in #templateEdit
+        var $firstOption = $(".editClass > option");
+        $(".editClass").html($firstOption.first());
+        for (var i = 0; i < data.classes.length; i++) {
+            var option = $(".editClass > option").first().get(0);
+            var newOption = option.cloneNode(true);
+            newOption.innerHTML = data.classes[i].name;
+            $(".editClass").append(newOption);
+        }
+        $firstOption.first().remove();
+    }
+
     var newId = getNewAssignmentId();
     // add new one,
     var date = new Date();
@@ -290,7 +302,7 @@ function pressButton(event) {
     var elem = event.target;
     var id = $(elem).parentsUntil("tbody").last().attr("id");
     var isHidden = ($("#" + id).hasClass("hide"));
-    
+
     if (elem.classList.contains("buttonDelete")) {
         deleteAssignment(id);
     } else if (elem.classList.contains("buttonEdit")) {
@@ -334,7 +346,7 @@ function changeDate(event) {
     }
     $td.find(".editMonth").val(m);
     $td.find(".editDay").val(d);
-    
+
     var weekDay = weekDayFromDate(m, d);//DAYS[date.getDay()];
     $td.find(".editWeekDay").text(weekDay);
 }
@@ -357,8 +369,10 @@ function toggleRowHide(id) {
 
 function getNewAssignmentId() {
     var maxId = 0;
-    for (var i = 0; i < data.assignments.length; i++) {
-        maxId = Math.max(data.assignments[i].id, maxId);
+    if (data.assignments) {
+        for (var i = 0; i < data.assignments.length; i++) {
+            maxId = Math.max(data.assignments[i].id, maxId);
+        }
     }
     return maxId + 1;
 }
@@ -391,13 +405,18 @@ function daysTillDate(date1, date2) {
     return Math.round(
         (date2.getTime() - date1.getTime()) / oneDay);
 }
-    
+
 function getMaxDaysInMonth(m) {
     return new Date(new Date().getFullYear(), m, 0).getDate();
 }
 
 function loadData() {
-    return JSON.parse(localStorage[ASSIGNMENTS_KEY]);
+    try {
+        return JSON.parse(localStorage[ASSIGNMENTS_KEY]);
+    } catch (e) {
+        // there's nothing in the localStorage yet
+        return {};
+    }
 }
 
 function saveData() {

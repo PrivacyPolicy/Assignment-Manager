@@ -3,23 +3,26 @@ $(function() {
         $("#classList").removeClass("hidden");
         $(".classItem > .className").first().focus();
     });
-    
+
     $(".linkNewClass").click(function(event) {
         var classItem = {id:getNewClassId(), name:""};
+        if (!data.classes) data.classes = [];
         data.classes.push(classItem);
         addClassItem(classItem);
         $(".classItem:not(.persistant) > input").last().focus();
     });
-    
+
     $("#classListCancel > a, #classList").click(function(event) {
         if ($(event.target).is(
             "#classListCancel > a, #classList")) {
             goBack();
         }
     });
-    
-    buildClassTable();
-    
+
+    if (data.classes) {
+        buildClassTable();
+    }
+
     $(document).keyup(function(event) {
         if (event.keyCode === 27) {// esc
             goBack();
@@ -60,15 +63,17 @@ function changeClass(event) {
     var classItem = event.target.parentElement;
     var id = parseInt(classItem.id.substr(1));
     var ind = getObjIndForKeyValue(data.classes, "id", id);
-    if (!ind) return;
+    if (ind == null) return;
     data.classes[ind].name = event.target.value;
     saveData();
 }
 
 function getNewClassId() {
     var maxId = 0;
-    for (var i = 0; i < data.classes.length; i++) {
-        maxId = Math.max(data.classes[i].id, maxId);
+    if (data.classes) {
+        for (var i = 0; i < data.classes.length; i++) {
+            maxId = Math.max(data.classes[i].id, maxId);
+        }
     }
     return maxId + 1;
 }
