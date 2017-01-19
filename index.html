@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=utf-8>
+        <title>Assignment Manager</title>
+
+		<link rel="shortcut icon" href="favicon.png" />
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu"
+              rel=stylesheet>
+        <link rel=stylesheet href=assignments.css>
+        <script src=jquery.min.js></script>
+        <script src=assignments.js></script>
+        <script src=classes.js></script>
+    </head>
+    <body>
+        <table id=content>
+            <thead>
+                <tr class=persistant>
+                    <th class=class>Class</th>
+                    <th class=name>Name</th>
+                    <th class=due>Due</th>
+                    <th class=actions>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id=newAssignment class=persistant>
+                    <td>
+                        <button id=linkClasses>
+                            Classes
+                        </button>
+                    </td>
+                    <td colspan=2 class="noAssignments invisible">
+                        No Assignments!
+                    </td>
+                    <td class=actions>
+                        <button class=buttonNew>New</button>
+                    </td>
+                </tr>
+                <tr id=templateAssignment class="persistant assignment" tabindex=0>
+                    <td class=class>Computer Architecture</td>
+                    <td class=name>
+                        <div>Homework</div>
+                    </td>
+                    <td class=due>9/11 (Thu)</td>
+                    <td class=actions>
+                        <button class=buttonDelete
+                                tabindex=-1>X</button>
+                        <button class=buttonEdit
+                                tabindex=-1>Edit</button>
+                        <button class=buttonHide 
+                                tabindex=-1>Hide</button>
+                    </td>
+                </tr>
+                <tr id=templateEdit class="editting persistant">
+                    <td class=class>
+                        <select class=editClass>
+                            <option>Computer Architecture</option>
+                        </select>
+                    </td>
+                    <td class=name>
+                        <input type=text class=editName>
+                    </td>
+                    <td class=due>
+                        <input type=number class=editMonth value=9>
+                        <input type=number class=editDay value=11>
+                        (<span class=editWeekDay>Thu</span>)
+                    </td>
+                    <td class=actions>
+                        <button class=buttonCancel>Cancel</button>
+                        <button class=buttonApply>Apply</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div id=classList class="popup hidden">
+            <div id=list>
+                <div class="classItem persistant" id=templateClassItem>
+                    <input class=className value="Cryptography">
+                    <a href="javascript:void(0)" title="Delete class"
+                       class=linkDeleteClass>✖</a>
+                </div>
+                <div id=linkNewClass class="classItem persistant">
+                    <a href="javascript:void(0)" title="Add class"
+                       class=linkNewClass>✚ Add Class</a>
+                </div>
+            </div>
+            <div id=classListCancel>
+                <a href="javascript:void(0);">✖</a>
+            </div>
+        </div>
+    </body>
+</html>

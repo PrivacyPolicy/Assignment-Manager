@@ -1,0 +1,118 @@
+* {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+thead, tbody, table, body, td, th, button {
+    padding: .5vw;
+    margin: .5vw;
+}
+
+body, button, select, input {
+    font-size: 2.2vw;
+}
+
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+.class   { width: 28%; }
+.name    { width: 25%; }
+.due     { width: 23%; }
+.actions { width: 25%; }
+
+td, th {
+    text-align: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.actions {
+    text-align: right;
+}
+
+#templateAssignment, #templateEdit {
+    visibility: hidden;
+    pointer-events: none;
+    height: 0;
+    position: absolute;
+}
+.noAssignments {
+    text-align: center;
+}
+
+input[type="number"] {
+    width: 2em;
+}
+input {
+    width: 10em;
+}
+
+.hidden {
+    display: none;
+}
+.invisible {
+    visibility: hidden;
+}
+
+tr.hide > *:not(.actions), tr.hide > .actions > :not(.buttonHide) {
+    opacity: .2;
+}
+
+.name > div {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* Popup stuff */
+.popup {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+}
+.popup > div#list {
+    padding: 3vw;
+    background: white;
+    width: 50vw;
+    height: 30vh;
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 2px;
+    box-shadow: 3px 3px 6px #333;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.linkDeleteClass, .linkNewClass {
+    text-decoration: none;
+    color: black;
+}
+
+#templateClassItem {
+    display: none;
+}
+
+#classListCancel {
+    text-align: right;
+}
+#classListCancel > a {
+    color: white;
+    font-size: 5vw;
+    margin: 0 1.5vw;
+    text-decoration: none;
+}
+
+.classItem {
+    white-space: nowrap;
+    text-align: center;
+}
+.classItem:not(:last-child) {
+    margin-bottom: 2vw;
+}
+.classItem > input {
+    width: 40vw;
+}
