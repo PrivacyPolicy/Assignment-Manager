@@ -176,7 +176,12 @@ function confirmEditAssignment() {
 
 function cancelEditAssignment() {
     var id = parseInt($("tr.hidden").attr("id"));
-    var obj = getObjForKeyValue(data.assignments, "id", id);
+    var obj;
+    try {
+        obj = getObjForKeyValue(data.assignments, "id", id);
+    } catch (e) {
+        // There aren't any assignments yet, leave obj undefined
+    }
     if (obj == undefined) {
         // New class, get rid of it entirely
         $(".editting:not(#templateEdit), tr.hidden").remove();
