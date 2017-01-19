@@ -1,15 +1,3 @@
-// TODO: when a new class is added, update the dropdown
-// TODO: also, when classes are visible, typing c focuses first input
-// TODO: use keydown instead of kep up (arrow keys)
-// TODO: fix otherscccccfxfd... whatever class to be just "other"
-// TODO: escaping out of edit should focus previous element
-// TODO: implement undo/redo
-// TODO: setting the date for next month doesn't show days due
-// TODO: update across tabs
-// TODO: multi-tabbed view
-// TODO: fix bug when typing up/down scrolls view by default
-// TODO: rearrange classes
-
 const ASSIGNMENTS_KEY = "AssignmentManager_data"
       DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 var data = {};
