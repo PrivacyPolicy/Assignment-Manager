@@ -10,6 +10,18 @@ $(function() {
 
     if (data.assignments) {
         buildTable(data);
+        if (data.classes) {
+            // Populate class list in #templateEdit
+            var $firstOption = $(".editClass > option");
+            $(".editClass").html($firstOption.first());
+            for (var i = 0; i < data.classes.length; i++) {
+                var option = $(".editClass > option").first().get(0);
+                var newOption = option.cloneNode(true);
+                newOption.innerHTML = data.classes[i].name;
+                $(".editClass").append(newOption);
+            }
+            $firstOption.first().remove();
+        }
     } else {
         $(".noAssignments").removeClass("invisible");
     }
