@@ -11,11 +11,13 @@ Then, select your class, name the assignment, and choose the due date.
 Then, click 'Apply'
 
 ## Keyboard Shortcuts
-- 'C': Open class list dialog
-- 'N': New assignment
-- 'Tab': Highlight next assignment
-- 'Arrow Keys': Navigate assignments and buttons
-- '1'-'9': Navigate assignments
-- 'D'/'X': Delete highlighted assignment
-- 'E': Edit highlighted assignment
-- 'H': Toggle hide/show highlighted assignment
+| Key            | Action                                  |
+| ---------------|-----------------------------------------|
+| **C**          | Open class list dialog                  |
+| **N**          | New assignment                          |
+| **Tab**        | Highlight next assignment               |
+| **Arrow Keys** | Navigate assignments and buttons        |
+| **1-9**        | Navigate assignments                    |
+| **D/X**        | Delete highlighted assignment           |
+| **E**          | Edit highlighted assignment             |
+| **H**          | Toggle hide/show highlighted assignment |
